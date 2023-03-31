@@ -1,23 +1,112 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33516.290
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "MathsQuest", "MathsQuest\MathsQuest.pyproj", "{0DAF048E-1340-4043-877C-79080C51C33F}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0DAF048E-1340-4043-877C-79080C51C33F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DAF048E-1340-4043-877C-79080C51C33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3EE28308-B4B9-4F9D-8D39-C71673DFEA5A}
-	EndGlobalSection
-EndGlobal
+import math
+import random
+
+
+def calculate(first_number: float, second_number: float) -> dict:
+    """Return a dictionary containing the sum, difference, product, and quotient
+    of the two input numbers."""
+    
+    addition = first_number + second_number
+    subtraction = first_number - second_number
+    multiplication = first_number * second_number
+    
+    try:
+        division = first_number / second_number
+    except ZeroDivisionError:
+        division = math.inf
+    
+    return {"sum": addition, "difference": subtraction,
+            "product": multiplication, "quotient": division}
+
+
+def play_math_quest() -> None:
+    """Play the Maths Quest game where the user inputs two numbers and sees their sum,
+    difference, product, and quotient. The user can then choose to guess a number
+    between 1 and 100 or exit the game."""
+    
+    print("Welcome to Maths Quest!")
+    play_again = True
+    
+    while play_again:
+        first_number = None
+        second_number = None
+        
+        while first_number is None or second_number is None:
+            try:
+                first_number = float(input("Enter the first number: "))
+                second_number = float(input("Enter the second number: "))
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+        
+        results = calculate(first_number, second_number)
+        
+        print(f"\nThe sum of {first_number} and {second_number} is {results['sum']:.2f}")
+        print(f"The difference between {first_number} and {second_number} is {results['difference']:.2f}")
+        print(f"The product of {first_number} and {second_number} is {results['product']:.2f}")
+        
+        if results['quotient'] != math.inf:
+            print(f"The quotient of {first_number} divided by {second_number} is {results['quotient']:.2f}")
+        else:
+            print("Error: division by zero!")
+        
+        print("\nGreat! Let's continue with the next challenge!")
+        
+        random_number = random.randint(1, 100)
+        print(f"\nYour next task is to guess a number between 1 and 100. You have three tries.\n")
+        hints_given = 0
+        
+        for i in range(1, 4):
+            guess = None
+            
+            while guess is None:
+                try:
+                    guess = int(input(f"Attempt #{i}: "))
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+            
+            if guess == random_number:
+                print("Congratulations, you guessed the number!")
+                break
+            elif i == 3:
+                print(f"Sorry, you didn't guess the number. The number was {random_number}.")
+            else:
+                hints_given += 1
+                if hints_given == 1:
+                    if random_number % 2 == 0:
+                        print("Hint: The number is even.")
+                    else:
+                        print("Hint: The number is odd.")
+                elif hints_given == 2:
+                    if random_number < 50:
+                        print("Hint: The number is less than 50.")
+                    else:
+                        print("Hint: The number is greater than or equal to 50.")
+                else:
+                    print("Wrong guess. Please try again.")
+    
+        user_choice = input("\nDo you want to play again or exit? (p/e): ")
+        if user_choice.lower() == "e":
+            play_again = False
+        else:
+            print("\nGreat! Let's continue with the next challenge!")
+            
+            random_number = random.randint(1, 100)
+        print("You have 3 attempts to guess the number I'm thinking of. It's a whole number between 1 and 100.\n")
+
+        for attempt in range(1, 4):
+            guess = None
+            while guess is None:
+                try:
+                    guess = int(input(f"Attempt {attempt}: "))
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+
+            if guess == random_number:
+                print("Congratulations, you guessed the number!")
+                break
+            elif attempt == 3:
+                print(f"Sorry, you didn't guess the number. The number was {random_number}.")
+            else:
+                print("Wrong guess. Please try again.")
+
+        print("\nThanks for playing Maths Quest!")
